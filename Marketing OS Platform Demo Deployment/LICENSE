@@ -1,0 +1,70 @@
+PROPRIETARY SOFTWARE LICENSE
+============================
+
+Copyright (c) 2026 EB1A Experts. All Rights Reserved.
+
+This software, including all source code, design assets, documentation,
+screenshots, and accompanying files (collectively, the "Software"), is the
+proprietary and confidential property of EB1A Experts.
+
+NOTICE
+------
+This repository is published for demonstration, portfolio, and showcase
+purposes only. Public visibility of this repository does NOT constitute
+an open-source license or a grant of any rights to the Software.
+
+RESTRICTIONS
+------------
+Without the express prior written permission of EB1A Experts, you may NOT:
+
+  1. Copy, reproduce, republish, upload, post, transmit, or distribute
+     the Software or any portion of it.
+  2. Modify, adapt, translate, reverse-engineer, decompile, or create
+     derivative works based on the Software.
+  3. Use the Software, in whole or in part, for any commercial purpose.
+  4. Use the EB1A Experts name, logo, brand assets, or trademarks for any
+     purpose other than viewing this demonstration.
+  5. Remove or alter any copyright, trademark, or other proprietary
+     notices contained in the Software.
+
+PERMITTED USE
+-------------
+You are permitted to:
+
+  • View the source code for the purpose of evaluating EB1A Experts'
+    technical and design capabilities.
+  • Run the demo locally for evaluation purposes only.
+
+DUMMY DATA DISCLAIMER
+---------------------
+All names, accounts, post content, metrics, comments, sentiment data,
+competitor names, influencer profiles, and analytics shown in this
+demonstration are FICTITIOUS and intended for UI/UX demonstration only.
+Any resemblance to real persons, accounts, posts, or metrics is
+coincidental.
+
+THIRD-PARTY NOTICES
+-------------------
+This Software references third-party libraries (React, Babel Standalone,
+Google Fonts) loaded from public CDNs. Each remains subject to its own
+license. Brand materials in `uploads/` (if present) are reference assets
+internal to EB1A Experts and are not licensed for redistribution.
+
+NO WARRANTY
+-----------
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. IN NO EVENT SHALL
+THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR
+OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE,
+ARISING FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+
+CONTACT
+-------
+For licensing inquiries, partnership requests, or permission to use any
+part of this Software, please contact:
+
+    EB1A Experts
+    contact@eb1aexperts.com
+    https://eb1aexperts.com

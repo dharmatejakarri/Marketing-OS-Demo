@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>EB1A Experts — Marketing OS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;450;500;600;700&family=Inter:wght@400;450;500;600&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles-modals.css">
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="components/store.jsx"></script>
+<script type="text/babel" src="components/icons.jsx"></script>
+<script type="text/babel" src="components/data.jsx"></script>
+<script type="text/babel" src="components/shell.jsx"></script>
+<script type="text/babel" src="components/dashboard.jsx"></script>
+<script type="text/babel" src="components/queue.jsx"></script>
+<script type="text/babel" src="components/approval.jsx"></script>
+<script type="text/babel" src="components/screens1.jsx"></script>
+<script type="text/babel" src="components/screens2.jsx"></script>
+<script type="text/babel" src="components/reports.jsx"></script>
+<script type="text/babel" src="components/engagement.jsx"></script>
+<script type="text/babel" src="components/modals.jsx"></script>
+
+<script type="text/babel">
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "theme": "dark",
+  "accent": "violet",
+  "font": "inter-tight",
+  "density": "regular",
+  "approvalVariant": "sidebyside",
+  "dashboardVariant": "standard",
+  "feedOn": false
+}/*EDITMODE-END*/;
+
+const ACCENTS = {
+  violet: { c: '#7c5cff', c1: '#9b82ff', bg: 'rgba(124,92,255,0.12)', ring: 'rgba(124,92,255,0.35)' },
+  teal:   { c: '#2dd4bf', c1: '#5eead4', bg: 'rgba(45,212,191,0.12)', ring: 'rgba(45,212,191,0.35)' },
+  lime:   { c: '#c4f542', c1: '#d4f87a', bg: 'rgba(196,245,66,0.12)', ring: 'rgba(196,245,66,0.35)' },
+  cyan:   { c: '#22d3ee', c1: '#67e8f9', bg: 'rgba(34,211,238,0.12)', ring: 'rgba(34,211,238,0.35)' },
+  magenta:{ c: '#e879f9', c1: '#f0abfc', bg: 'rgba(232,121,249,0.12)', ring: 'rgba(232,121,249,0.35)' },
+  amber:  { c: '#fbbf24', c1: '#fcd34d', bg: 'rgba(251,191,36,0.12)', ring: 'rgba(251,191,36,0.35)' },
+};
+
+const FONTS = {
+  'inter-tight': `'Inter Tight', 'Inter', ui-sans-serif, system-ui, sans-serif`,
+  'inter': `'Inter', ui-sans-serif, system-ui, sans-serif`,
+  'mono': `'JetBrains Mono', ui-monospace, monospace`,
+  'serif': `'Instrument Serif', Georgia, serif`,
+};
+
+function App() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const [route, setRoute] = React.useState('dashboard');
+  const [feedOn, setFeedOn] = React.useState(t.feedOn);
+  const [navCollapsed, setNavCollapsed] = React.useState(false);
+  const [autoFeed, setAutoFeed] = React.useState(true);
+
+  React.useEffect(() => {
+    const check = () => {
+      const w = window.innerWidth;
+      setNavCollapsed(w < 1100);
+      if (autoFeed) setFeedOn(w >= 1280);
+    };
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, [autoFeed]);
+
+  React.useEffect(() => {
+    document.documentElement.setAttribute('data-theme', t.theme);
+    document.documentElement.setAttribute('data-density', t.density);
+    const a = ACCENTS[t.accent] || ACCENTS.violet;
+    document.documentElement.style.setProperty('--accent', a.c);
+    document.documentElement.style.setProperty('--accent-1', a.c1);
+    document.documentElement.style.setProperty('--accent-bg', a.bg);
+    document.documentElement.style.setProperty('--accent-ring', a.ring);
+    document.documentElement.style.setProperty('--font-sans', FONTS[t.font]);
+    document.body.style.fontFamily = FONTS[t.font];
+  }, [t.theme, t.density, t.accent, t.font]);
+
+  React.useEffect(() => { Store.init(); }, []);
+
+  React.useEffect(() => {
+    const onKey = (e) => {
+      const mod = e.metaKey || e.ctrlKey;
+      if (mod && e.key === 'k') { e.preventDefault(); Store.toggleCommand(); return; }
+      if (e.key === 'Escape') { Store.toggleCommand(false); Store.closeModal(); return; }
+      if (mod && e.key === '1') { e.preventDefault(); setRoute('dashboard'); }
+      if (mod && e.key === '2') { e.preventDefault(); setRoute('queue'); }
+      if (mod && e.key === '3') { e.preventDefault(); setRoute('approval'); }
+      if (mod && e.key === '4') { e.preventDefault(); setRoute('calendar'); }
+      if (mod && e.key === '5') { e.preventDefault(); setRoute('engagement'); }
+      if (mod && e.key === '6') { e.preventDefault(); setRoute('analytics'); }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
+  let screen = null;
+  if (route === 'dashboard') screen = <Dashboard onNavigate={setRoute} />;
+  else if (route === 'queue') screen = <ContentQueue onOpenPost={() => setRoute('approval')} onNavigate={setRoute} />;
+  else if (route === 'approval') screen = <ApprovalWorkflow variant={t.approvalVariant} onVariantChange={(v) => setTweak('approvalVariant', v)} />;
+  else if (route === 'calendar') screen = <Calendar />;
+  else if (route === 'engagement') screen = <EngagementHub />;
+  else if (route === 'analytics') screen = <Analytics onNavigate={setRoute} />;
+  else if (route === 'trends') screen = <Trends />;
+  else if (route === 'influencers') screen = <Influencers />;
+  else if (route === 'daily') screen = <DailyBrief onNavigate={setRoute} />;
+  else if (route === 'reports') screen = <Reports onNavigate={setRoute} />;
+  else if (route === 'onboarding') screen = <Onboarding />;
+  else if (route === 'integrations') screen = <SEOIntegrations onNavigate={setRoute} />;
+  else if (route === 'settings') screen = <Settings />;
+
+  return (
+    <div className="app" data-feed={feedOn ? 'on' : 'off'} data-nav={navCollapsed ? 'collapsed' : 'expanded'}>
+      <TopBar route={route} onNavigate={setRoute} feedOn={feedOn} onToggleFeed={() => { setAutoFeed(false); setFeedOn(!feedOn); }} />
+      <SideNav route={route} onNavigate={setRoute} collapsed={navCollapsed} />
+      <div className="main" data-screen-label={route}>{screen}</div>
+      {feedOn && <ActivityFeed />}
+      <Toasts />
+      <CommandPalette onNavigate={setRoute} />
+      <ModalRoot onNavigate={setRoute} />
+
+      <TweaksPanel>
+        <TweakSection label="Theme" />
+        <TweakRadio label="Mode" value={t.theme} options={['dark', 'light']} onChange={(v) => setTweak('theme', v)} />
+        <TweakRadio label="Accent" value={t.accent} options={['violet', 'teal', 'lime', 'cyan', 'magenta', 'amber']} onChange={(v) => setTweak('accent', v)} />
+
+        <TweakSection label="Typography & Density" />
+        <TweakSelect label="Font" value={t.font} options={[
+          { value: 'inter-tight', label: 'Inter Tight (default)' },
+          { value: 'inter', label: 'Inter' },
+          { value: 'mono', label: 'JetBrains Mono' },
+          { value: 'serif', label: 'Instrument Serif' },
+        ]} onChange={(v) => setTweak('font', v)} />
+        <TweakRadio label="Density" value={t.density} options={['compact', 'regular', 'comfy']} onChange={(v) => setTweak('density', v)} />
+
+        <TweakSection label="Layout" />
+        <TweakToggle label="Activity feed" value={feedOn} onChange={(v) => { setFeedOn(v); setTweak('feedOn', v); }} />
+        <TweakRadio label="Approval view" value={t.approvalVariant} options={['sidebyside', 'stack', 'mobile']} onChange={(v) => setTweak('approvalVariant', v)} />
+
+        <TweakSection label="Quick navigate" />
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 4 }}>
+          {[
+            { id: 'dashboard', l: 'Command' },
+            { id: 'queue', l: 'Queue' },
+            { id: 'approval', l: 'Approval' },
+            { id: 'calendar', l: 'Calendar' },
+            { id: 'analytics', l: 'Analytics' },
+            { id: 'trends', l: 'Trends' },
+            { id: 'influencers', l: 'Influencers' },
+            { id: 'daily', l: 'Daily Brief' },
+            { id: 'onboarding', l: 'Knowledge' },
+            { id: 'settings', l: 'Settings' },
+          ].map(r => (
+            <button key={r.id}
+              onClick={() => setRoute(r.id)}
+              className="twk-field"
+              style={{
+                cursor: 'default', textAlign: 'left', fontSize: 11,
+                background: route === r.id ? 'rgba(124,92,255,0.15)' : '',
+                borderColor: route === r.id ? 'rgba(124,92,255,0.4)' : '',
+                color: route === r.id ? '#7c5cff' : '',
+                fontWeight: route === r.id ? 600 : 400,
+              }}>
+              {r.l}
+            </button>
+          ))}
+        </div>
+      </TweaksPanel>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
